@@ -32,9 +32,6 @@ customElements.define(
 
       const shadow = this.attachShadow({ mode: 'open' })
       shadow.innerHTML = html
-
-      this.addEventListener('mousedown', () => this.setAttribute('pressed', '')) // add pressed
-      this.addEventListener('mouseup', () => this.removeAttribute('pressed')) // remove pressed
       this.addEventListener('click', () => {
         new Audio(this.getAttribute('sound')).play()
       }) // play bruh sound

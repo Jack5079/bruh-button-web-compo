@@ -1,23 +1,25 @@
-customElements.define('sound-button', class extends HTMLElement { // This is a bruh button
-  constructor() {
-    super()
-    const text = this.innerText
-    let shadow = this.attachShadow({ mode: 'open' })
-    shadow.innerHTML = `
+/* global customElements, Audio, HTMLElement */
+customElements.define(
+  'sound-button',
+  class extends HTMLElement {
+    // This is a bruh button
+    constructor () {
+      super()
+      const html = `
     <style>
    button {
-	padding:1em;
-	cursor:pointer;
-	background-color:red;
+  padding:1em;
+  cursor:pointer;
+  background-color:red;
   border-radius: 1em;
-	box-shadow:0 9px #ed2939;
+  box-shadow:0 9px #ed2939;
      user-select: none; 
   
            border: 0;
       
   font-family:cursive;
       cursor: pointer;
-	color:#fff;
+  color:#fff;
    }
 
    button:active {
@@ -25,24 +27,23 @@ customElements.define('sound-button', class extends HTMLElement { // This is a b
        margin-top: 4px;
    }
     </style>
-    <button>${text}</button>
+    <button>${this.innerText}</button>
     `
 
-    this.addEventListener('mousedown', () => this.setAttribute('pressed', '')) // add pressed
-    this.addEventListener('mouseup', () => this.removeAttribute('pressed')) // remove pressed
-    this.addEventListener('click', () => { new Audio(this.getAttribute('sound')).play() }) // play bruh sound
-    this.textContent = this.innerText // set the textcontent for the epic :sunglasses:
-  }
+      const shadow = this.attachShadow({ mode: 'open' })
+      shadow.innerHTML = html
 
-  get innerText () {
-    if (this.shadowRoot)
-      return this.shadowRoot.querySelector('button').innerText
-    else return this.textContent
-  }
+      this.addEventListener('mousedown', () => this.setAttribute('pressed', '')) // add pressed
+      this.addEventListener('mouseup', () => this.removeAttribute('pressed')) // remove pressed
+      this.addEventListener('click', () => {
+        new Audio(this.getAttribute('sound')).play()
+      }) // play bruh sound
 
-  set innerText (val) {
-    this.shadowRoot.querySelector('button').innerText = val
-    this.textContent = val
+      this.addEventListener('DOMCharacterDataModified', () => {
+        this.shadowRoot.querySelector(
+          'button'
+        ).innerText = this.textContent.trim()
+      })
+    }
   }
-}
 )
